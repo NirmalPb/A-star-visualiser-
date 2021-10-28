@@ -95,6 +95,13 @@ def h(p1, p2):
     return abs(x1 - x2) + abs(y1 - y2)
 
 
+def reconstruckt_path (came_from, current, draw):
+    while current in came_from:
+        current = came_from[current]
+        current.make_path()
+        draw()
+
+
 def algorithm(draw, grid, start, end):
     count = 0
     open_set = PriorityQueue()
@@ -115,6 +122,7 @@ def algorithm(draw, grid, start, end):
         open_set_hash.remove(current)
 
         if current == end:
+            reconstruckt_path(came_from,end,draw)
             return True
 
         for neighbor  in current.neighbors:
@@ -222,6 +230,10 @@ def main(win, width):
                         for spot in row:
                             spot.update_neighbours(grid)
                     algorithm(lambda: draw(win, grid, ROWS, width), grid, start, end)
+                if event.key == pygame.K_c:
+                    start = None
+                    end = None
+                    grid = make_grid(ROWS, width)
     pygame.quit()
 
 
